@@ -5,17 +5,17 @@ const { QueryType } = require("discord-player")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("play")
-        .setDescription("loads songs from youtube")
+        .setDescription("loads songs from spotify")
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("song")
-                .setDescription("Loads a single song from a url")
+                .setDescription("Loads a single song from a spotify url")
                 .addStringOption((option) => option.setName("url").setDescription("the song's url").setRequired(true))
         )
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("playlist")
-                .setDescription("Loads a playlist of songs from a url")
+                .setDescription("Loads a playlist of songs from a spotify url")
                 .addStringOption((option) => option.setName("url").setDescription("the playlist's url").setRequired(true))
         )
         .addSubcommand((subcommand) =>
@@ -38,7 +38,7 @@ module.exports = {
             let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
-                searchEngine: QueryType.YOUTUBE_VIDEO
+                searchEngine: QueryType.SPOTIFY_TRACK // Use Spotify for song URL
             })
             if (result.tracks.length === 0)
                 return interaction.editReply("No results")
@@ -54,7 +54,7 @@ module.exports = {
             let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
-                searchEngine: QueryType.YOUTUBE_PLAYLIST
+                searchEngine: QueryType.SPOTIFY_PLAYLIST // Use Spotify for playlist URL
             })
 
             if (result.tracks.length === 0)
@@ -69,7 +69,7 @@ module.exports = {
             let url = interaction.options.getString("searchterms")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
-                searchEngine: QueryType.AUTO
+                searchEngine: QueryType.SPOTIFY_SEARCH // Use Spotify for keyword search
             })
 
             if (result.tracks.length === 0)
